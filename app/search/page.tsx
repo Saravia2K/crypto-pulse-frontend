@@ -124,7 +124,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <div className="flex flex-col gap-2">
               {results.data.map((crypto) => (
                 <SearchResultRow
-                  key={crypto.id}
+                  key={crypto.rank}
                   id={crypto.id}
                   rank={crypto.rank}
                   symbol={crypto.symbol}

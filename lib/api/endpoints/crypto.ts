@@ -20,6 +20,12 @@ export function fetchCryptoDetail(id: string): Promise<CryptoDetailResponse> {
   return apiFetch<CryptoDetailResponse>(`/api/crypto/${id}`)
 }
 
+export function fetchCryptosBatch(ids: string[]): Promise<TopCryptosResponse> {
+  return apiFetch<TopCryptosResponse>(
+    `/api/crypto/batch?ids=${ids.map(encodeURIComponent).join(',')}`,
+  )
+}
+
 export function fetchCryptoHistory(
   id: string,
   days = 7,

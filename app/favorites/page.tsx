@@ -7,7 +7,7 @@ import type { CryptoAsset } from '@/types/crypto'
 import { CryptoGrid } from '@/components/crypto/CryptoGrid'
 import { CryptoCardSkeleton } from '@/components/ui/Skeleton'
 import { Button } from '@/components/ui/Button'
-import { API_BASE_URL } from '@/lib/constants'
+import { fetchCryptosBatch } from '@/lib/api/endpoints/crypto'
 
 export default function FavoritesPage() {
   const favorites = useCryptoStore((s) => s.favorites)
@@ -21,17 +21,9 @@ export default function FavoritesPage() {
     }
 
     setLoading(true)
-    Promise.all(
-      favorites.map((id) =>
-        fetch(`${API_BASE_URL}/api/crypto/${id}`)
-          .then((r) => (r.ok ? r.json() : null))
-          .then((j) => (j ? j.data : null))
-          .catch(() => null),
-      ),
-    )
-      .then((results) => {
-        setCryptos(results.filter(Boolean) as CryptoAsset[])
-      })
+    fetchCryptosBatch(favorites)
+      .then((res) => setCryptos(res.data))
+      .catch(() => setCryptos([]))
       .finally(() => setLoading(false))
   }, [favorites])
 
